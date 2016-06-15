@@ -15,4 +15,17 @@ BEGIN
 						)';
     COMMIT;
   end if;
-  END CT_CUSTOMER;
+    SELECT count(*) into v_tabcnt
+  FROM   ALL_SEQUENCES
+  WHERE  SEQUENCE_NAME = 'SEQ_CUSTOMERID' and
+         SEQUENCE_OWNER = USER;
+
+  if v_tabcnt = 0 then
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_CUSTOMERID
+                          START WITH 100
+                          INCREMENT BY 1
+                          CACHE 20';
+    COMMIT;
+  end if;
+
+END CT_CUSTOMER;
